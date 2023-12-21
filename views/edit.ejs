@@ -1,0 +1,81 @@
+<html>
+    <title>Update</title>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            body {
+                background-image: url('https://4kwallpapers.com/images/wallpapers/windows-11-stock-official-colorful-3840x2400-5658.jpg');
+                background-repeat: no-repeat;
+                background-size: cover;
+                font-family: Arial, Helvetica, sans-serif;}
+                * {box-sizing: border-box;}
+                
+    
+            .form-inline {
+                display: flex;
+                flex-flow: row wrap;
+                align-items: center;
+            }
+    
+            .form-inline label {
+                margin: 5px 10px 5px 0;
+                color: white;
+            }
+    
+            .form-inline input {
+                vertical-align: middle;
+                margin: 5px 10px 5px 0;
+                padding: 10px;
+                background-color: #fff;
+                border: 1px solid #ddd;
+            }
+    
+            .form-inline button {
+                padding: 10px 20px;
+                background-color: dodgerblue;
+                border: 1px solid #ddd;
+                color: white;
+                cursor: pointer;
+            }
+    
+            .form-inline button:hover {
+                background-color: royalblue;
+            }
+    
+            @media (max-width: 800px) {
+                .form-inline input {
+                    margin: 10px 0;
+                }
+    
+                .form-inline {
+                    flex-direction: column;
+                    align-items: stretch;
+                }
+            }
+            h2.textcolour{
+                color :white;
+            }
+        </style>
+    </head>
+<body>
+
+    <h2 class="textcolour">UPDATE</h2>
+
+    <form class="form-inline" action="/update" method = "POST">
+        <label for="RouteId">RouteId:</label><br>
+        <input type="text" id="RouteId" name="RouteId" value="<%= result2.RouteId %>"readonly><br>
+        <label for="VehicleNo">VehicleNo:</label><br>
+        <input type="text" id="VehicleNo" name="VehicleNo" value="<%= result2.VehicleNo %>"readonly><br><br>
+        <label for="Name">Name:</label><br>
+        <input type="text" id="Name" name="Name" value="<%= result2.Name %>"readonly><br><br>
+        <label for="date_dept">date_dept:</label><br>
+        <input type="text" id="date_dept" name="date_dept" value="<%= result2.date_dept %>"readonly><br><br>
+        <label for="Seat">Seat:</label><br>
+        <input type="text" id="Seat" name="Seat" value="<%= result2.Seat %>"readonly><br><br>
+        <label for="Phoneno">Phoneno:</label><br>
+        <input type="text" id="Phoneno" name="Phoneno" value="<%= result2.Phoneno %>"><br><br>
+        <button type="submit">Update</button>
+    </form>
+</body>
+
+</html>

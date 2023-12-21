@@ -1,0 +1,508 @@
+<html>
+<title>Ticket Booking System</title>
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        h1 {
+            font-size: 30px;
+            color: #fff;
+            text-transform: uppercase;
+            font-weight: 300;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        table {
+            width: 60%;
+            table-layout: fixed;
+
+        }
+
+        .tbl-header {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .tbl-content {
+            height: 300px;
+            overflow-x: auto;
+            margin-top: 0px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        th {
+            padding: 20px 15px;
+            text-align: centre;
+            font-weight: 500;
+            font-size: 12px;
+            color: #fff;
+            text-transform: uppercase;
+            background-color: rgb(103, 99, 99);
+        }
+
+        td {
+            padding: 15px;
+            text-align: left;
+            vertical-align: middle;
+            font-weight: 300;
+            font-size: 12px;
+            color: #fff;
+            border-bottom: solid 1px rgba(104, 101, 101, 0.1);
+            background-color: rgb(142, 122, 122);
+        }
+
+
+
+        /* demo styles */
+
+        @import url(https://fonts.googleapis.com/css?family=Roboto:400,500,300,700);
+
+        body {
+            background-image: url('https://4kwallpapers.com/images/wallpapers/windows-11-blue-background-dark-background-3840x2160-8228.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        section {
+            margin: 50px;
+        }
+
+
+        /* follow me template */
+        .made-with-EJS {
+            margin-top: 40px;
+            padding: 10px;
+            clear: left;
+            text-align: center;
+            font-size: 10px;
+            font-family: arial;
+            color: #fff;
+        }
+
+        .made-with-EJS i {
+            font-style: normal;
+            color: #F50057;
+            font-size: 14px;
+            position: relative;
+            top: 2px;
+        }
+
+        .made-with-EJS a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .made-with-EJS:hover {
+            text-decoration: underline;
+        }
+
+
+        /* for custom scrollbar for webkit browser*/
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+            box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+            box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+        }
+
+        /*---------------buttons ------------------*/
+
+        .btn {
+            background-color: dodgerblue;
+            border: none;
+            color: white;
+            padding: 12px 16px;
+            font-size: 16px;
+            cursor: pointer;
+
+
+        }
+
+        /* Darker background on mouse-over */
+        .btn:hover {
+            background-color: darkred;
+        }
+
+
+        /* Button used to open the contact form - fixed at the bottom of the page */
+        .open-button {
+            background-color: #555;
+            color: white;
+            padding: 16px 20px;
+            border: none;
+            cursor: pointer;
+            opacity: 0.8;
+            position: fixed;
+            bottom: 23px;
+            right: 28px;
+            width: 280px;
+        }
+
+        /* The popup form - hidden by default */
+        .form-popup {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            right: 15px;
+            border: 3px solid #f1f1f1;
+            z-index: 9;
+        }
+
+        /* Add styles to the form container */
+        .form-container {
+            max-width: 300px;
+            padding: 10px;
+            background-color: white;
+        }
+
+        /* Full-width input fields */
+        .form-container input[type=text],
+        .form-container input[type=password] {
+            width: 100%;
+            padding: 15px;
+            margin: 5px 0 22px 0;
+            border: none;
+            background: #f1f1f1;
+        }
+
+        /* When the inputs get focus, do something */
+        .form-container input[type=text]:focus,
+        .form-container input[type=password]:focus {
+            background-color: #ddd;
+            outline: none;
+        }
+
+        /* Set a style for the submit/login button */
+        .form-container .btn {
+            background-color: #04AA6D;
+            color: white;
+            padding: 16px 20px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+
+        /* Add a red background color to the cancel button */
+        .form-container .cancel {
+            background-color: red;
+        }
+
+        /* Add some hover effects to buttons */
+        .form-container .btn:hover,
+        .open-button:hover {
+            opacity: 1;
+        }
+    </style>
+    <script>
+        function onloadfunction(r, b, dateselected, routeid) {
+
+            var route = JSON.parse(r);
+            var booking = JSON.parse(b);
+
+
+            if (routeid == 'default')
+                routeid = route[0].RouteId;
+            var noofseats = route[0].Seats;
+            let routeselector = document.getElementById('routeselect');
+            console.log(booking);
+
+            // POPULATE ROUTE SELECTOR DROP DOWN
+
+            for (var i = 0; i < route.length; i++) {
+                console.log(route[i]);
+                var option = document.createElement('option');
+                option.text = route[i].Routename;
+                option.value = route[i].RouteId;
+                if (route[i].RouteId == routeid) {
+                    option.selected = true;
+                    noofseats = route[i].Seats;
+                }
+                routeselector.add(option);
+            }
+
+
+            // SET DATE ON DATE SELECTOR
+            var today = new Date();
+            if (dateselected != 'default')
+                today.setTime(dateselected);
+
+            today = getDateString(today);
+            const dateControl = document.querySelector('input[type="date"]');
+            dateControl.value = today;
+
+            // FILTER THE BOOKING FOR SELECTED ROUTE AND DATE
+
+            var currentbooking = filterBooking(booking, routeid, today);
+
+            // DRAW TABLE
+            redrawTable(noofseats, currentbooking);
+
+
+            //            const dateToday = new Date(dateControl.value);
+            //            const timestamp = dateToday.getTime();
+            //            console.log(timestamp)
+
+
+        }
+
+        function onSelectorChange(r, b) {
+
+            var route = JSON.parse(r);
+            var booking = JSON.parse(b);
+
+            console.log(booking);
+
+            const dateControl = document.querySelector('input[type="date"]');
+            var dateselected = dateControl.value;
+
+            let routeselector = document.getElementById('routeselect');
+            var routeid = routeselector.value;
+
+            console.log(dateselected);
+
+            console.log(routeid);
+
+            var noofseats = 0;
+            for (var i = 0; i < route.length; i++) {
+                if (route[i].RouteId == routeid) {
+                    noofseats = route[i].Seats;
+                }
+            }
+
+            var currentbooking = filterBooking(booking, routeid, dateselected);
+
+            redrawTable(noofseats, currentbooking);
+
+        }
+
+        function getDateString(today) {
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1;
+            var yyyy = today.getFullYear();
+            today = yyyy + '-';
+            if (mm < 10)
+                today += '0' + mm;
+            else
+                today += mm;
+            today += '-';
+            if (dd < 10)
+                today += '0' + dd;
+            else
+                today += dd;
+
+            return today;
+        }
+
+        function filterBooking(booking, routeid, today) {
+
+            var currentbooking = [];
+            for (var i = 0; i < booking.length; i++) {
+
+                var bookingdate = new Date();
+                bookingdate.setTime(Date.parse(booking[i].date_dept));
+                console.log(booking[i].date_dept);
+                console.log(Date.parse(booking[i].date_dept));
+
+                var bkdate = bookingdate.getDate();
+                var bkmonth = bookingdate.getMonth() + 1;
+                var bkyear = bookingdate.getFullYear();
+
+                bookingdatestring = bkyear + '-';
+                if (bkmonth < 10)
+                    bookingdatestring += '0' + bkmonth;
+                else
+                    bookingdatestring += bkmonth;
+                bookingdatestring += '-';
+                if (bkdate < 10)
+                    bookingdatestring += '0' + bkdate;
+                else
+                    bookingdatestring += bkdate;
+
+                console.log(bookingdatestring + " :: " + today);
+                if (booking[i].RouteId == routeid && today == bookingdatestring)
+                    currentbooking.push(booking[i])
+            }
+
+            console.log(currentbooking);
+            return currentbooking;
+
+        }
+
+        function openForm(seatno) {
+            document.getElementById("myForm").style.display = "block";
+            document.getElementById('popupseatno').innerHTML = '<b>' + seatno + ' </b>'
+        }
+
+        function closeForm() {
+            document.getElementById("myForm").style.display = "none";
+        }
+
+        function submitForm() {
+            var name = document.getElementById('popupname').value;
+            var phone = document.getElementById('popupphone').value;
+
+            const dateControl = document.querySelector('input[type="date"]');
+            var dateselected = dateControl.value;
+
+            let routeselector = document.getElementById('routeselect');
+            var routeid = routeselector.value;
+            if (name.length < 2)
+                document.getElementById('popupnameerror').innerHTML = 'Please enter correct name';
+            else if (phone.length < 10) {
+                document.getElementById('popupnameerror').innerHTML = '';
+                document.getElementById('popupphoneerror').innerHTML = 'Please enter correct phone number';
+            }
+            else {
+                document.getElementById('popupnameerror').innerHTML = '';
+                document.getElementById('popupphoneerror').innerHTML = '';
+                document.getElementById("myForm").style.display = "none";
+                var seatno = document.getElementById('popupseatno').innerHTML;
+                seatno = seatno.replace('<b>', '');
+                seatno = seatno.replace('</b>', '');
+                seatno = seatno.trim();
+                console.log(routeid);
+                console.log(dateselected);
+                console.log(seatno);
+                console.log(name);
+                console.log(phone);
+
+                window.location.href = 'http://localhost:8081/book/' + routeid + '/' + dateselected + '/' + seatno + '/' + name + '/' + phone;
+            }
+        }
+
+        function printticket(seatno) {
+
+            const dateControl = document.querySelector('input[type="date"]');
+            var dateselected = dateControl.value;
+
+            let routeselector = document.getElementById('routeselect');
+            var routeid = routeselector.value;
+
+            var url = 'http://localhost:8081/print/' + routeid + '/' + dateselected + '/' + seatno;
+
+            window.open(url,"_blank", "width=300, height=300");
+
+        }
+
+        function cancelbooking(seatno) {
+
+            const dateControl = document.querySelector('input[type="date"]');
+            var dateselected = dateControl.value;
+
+            let routeselector = document.getElementById('routeselect');
+            var routeid = routeselector.value;
+
+            window.location.href = 'http://localhost:8081/cancel/' + routeid + '/' + dateselected + '/' + seatno;
+
+        }
+
+        function redrawTable(noofseats, currentbooking) {
+            var bookingtable = document.getElementById('bookingtable');
+            console.log(bookingtable.rows.length);
+            console.log("No. of seats: " + noofseats);
+            if (bookingtable.rows.length > 1) {
+                for (var i = bookingtable.rows.length - 1; i > 0; i--)
+                    bookingtable.deleteRow(i);
+            }
+
+            for (var i = 0; i < noofseats; i++) {
+                var seatno = i + 1;
+                var row = bookingtable.insertRow(i + 1);
+                cell0 = row.insertCell(0);
+                cell0.innerHTML = i + 1;
+
+                var name = '';
+                var phone = '';
+                for (var j = 0; j < currentbooking.length; j++) {
+                    if (currentbooking[j].seat == seatno) {
+                        name = currentbooking[j].name;
+                        phone = currentbooking[j].phoneno;
+                    }
+                }
+                cell1 = row.insertCell(1);
+                cell1.innerHTML = name;
+
+                cell2 = row.insertCell(2);
+                cell2.innerHTML = phone;
+
+                cell3 = row.insertCell(3);
+                if (name == '') {
+                    cell3.innerHTML = '<button class="btn" onclick="openForm(' + seatno + ')"><i class="fa fa-plus"></i></button>';
+                }
+                else {
+                    cell3.innerHTML = '<button class="btn" onclick="cancelbooking(' + seatno + ')"><i class="fa fa-trash"></i></button>  <button class="btn" onclick="printticket(' + seatno + ')"><i class="fa fa-print"></i></button>';
+                }
+
+            }
+        }
+    </script>
+</head>
+
+<body
+    onload="onloadfunction('<%= JSON.stringify(route) %>','<%= JSON.stringify(booking) %>', '<%= dateselected %>', '<%= routeid %>')">
+    <br><br>
+    <h1>BUS TICKET SYSTEM - ADMIN TERMINAL</h1>
+    <br><br><br>
+    <label for="Routename" style="color:white ; margin-left: 310px;">Routename:</label>
+    <select name="Routename" id="routeselect"
+        onchange="onSelectorChange('<%= JSON.stringify(route) %>','<%= JSON.stringify(booking) %>')">
+    </select>
+    <label for="Routename" style="color:white ; margin-left: 110px;">Date:</label>
+    <input type="date" id="date" style="margin-left: 20px;"
+        onchange="onSelectorChange('<%= JSON.stringify(route) %>','<%= JSON.stringify(booking) %>')">
+    <br><br>
+    <div class="container">
+        <table style="margin-left:auto;margin-right:auto;" , id="bookingtable">
+            <thead>
+                <tr>
+                    <th>
+                        <font color="white">Seat #</font>
+                    </th>
+                    <th>
+                        <font color="white">Name</font>
+                    </th>
+                    <th>
+                        <font color="white">Phone #</font>
+                    </th>
+                    <th>
+                        <font color="white">Action</font>
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="bookingtablebody"></tbody>
+        </table>
+</body>
+</div>
+<!-- The form -->
+<div class="form-popup" id="myForm">
+    <form action="/action_page.php" class="form-container">
+        <h2>Booking Details</h2>
+
+        <label for="seat"><b>Seat No.: </b></label><label id="popupseatno"><b></b></label><br><br>
+
+        <label for="namelabel"><b>Name</b></label>
+        <label id="popupnameerror" style="color: red; font-size: 10px; text-align: center;"></label>
+        <input id="popupname" type="text" placeholder="Enter Name" name="name" required>
+
+
+        <label for="phonelabel"><b>Phone No.</b></label>
+        <label id="popupphoneerror" style="color: red; font-size: 10px; text-align: center;"></label>
+        <input id="popupphone" type="text" placeholder="Enter Phone Number" name="phone" required>
+
+        <button type="button" class="btn" onclick="submitForm()">Book Ticket</button>
+        <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+    </form>
+</div>
+
+</html>
